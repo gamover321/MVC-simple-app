@@ -1,0 +1,145 @@
+﻿@{
+    ViewBag.Title = "User list";
+}
+@model WebApplication2.Models.UsersModel
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+            var table = $('#js-users').dataTable({
+                "bLengthChange": false,
+                "bFilter": false,
+                "bInfo": false,
+                "bAutoWidth": false,
+                "bPaginate": false,
+                "bSort": false,
+                "oLanguage": {
+                    "sEmptyTable": "No demo"
+                },
+                "sAjaxSource": 'All',
+                "fnServerData": function (sSource, aoData, fnCallback) {
+                    //  aoData.push( { "name": "name", "value": name });
+                    $.ajax({
+                        "dataType": 'json',
+                        "type": "GET",
+                        "url": sSource,
+                        "data": aoData,
+                        "success": fnCallback
+                    })
+                },
+                "aoColumnDefs": [
+               {
+                   "aTargets": [4],
+                   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                       $(nTd).text('');
+                       $(nTd).append('<span class="js-edit">Edit</span>');
+                   }
+               },
+               {
+                   "aTargets": [5],
+                   "fnCreatedCell": function (nTd, sData, oData, iRow, iCol) {
+                       $(nTd).text('');
+                       $(nTd).append('<span class="js-delete">Delete</span>');
+                   }
+               }
+                ]
+            });
+
+
+
+            $(document).on('click', '.js-delete', function () {
+                var id = $(this).parents('tr').find('td').eq(0).text()
+
+                $.post('Delete', {
+                    id
+                }, function (result) {
+                    if (result = 'OK') {
+                        window.location.reload();
+                    }
+                })
+            });
+
+            $(document).on('click', '.js-edit', function () {
+                alert('user was edited')
+            });
+
+            $('#js-save-user').click(function () {
+
+                var name = $('.js-user-name').val();
+                var languageId = $('.js-user-language-id').val()
+
+                $.post('Create', {
+                    name, languageId
+                }, function (result) {
+                    if (result = 'OK') {
+                        $('#js-create-user-dialog').modal('hide');
+                        window.location.reload();
+                    }
+                })
+            });
+
+        });
+
+
+       
+
+    </script>
+
+}
+
+<h2>@ViewBag.Title</h2>
+<h3>@ViewBag.Message</h3>
+
+<p>Here you can manage site users</p>
+
+<table id="js-users" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Creation Date</th>
+            <th>Language</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+
+
+<br />
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#js-create-user-dialog">
+    Create new user
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="js-create-user-dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Create user</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="form-group"> 
+                    <label for="recipient-name" class="control-label">Name:</label> 
+                    <input class="form-control js-user-name"> 
+                </div>               
+                <div class="form-group">
+                    <label for="recipient-name" class="control-label">Language:</label>
+                    @Html.DropDownListFor(i=>i.LanguageId, Model.LanguageList, new { @class = "js-user-language-id"})                   
+                </div> 
+                
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="js-save-user">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище TestProjectModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tb_language">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tb_log">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="date" Type="datetime" Nullable="false" />
+          <Property Name="result" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="tb_user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="name" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="creation_date" Type="datetime" Nullable="false" />
+          <Property Name="language_id" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_tb_user_tb_language">
+          <End Role="tb_language" Type="Self.tb_language" Multiplicity="1" />
+          <End Role="tb_user" Type="Self.tb_user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tb_language">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tb_user">
+              <PropertyRef Name="language_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище TestProjectModelContainer">
+          <EntitySet Name="tb_language" EntityType="Self.tb_language" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tb_log" EntityType="Self.tb_log" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tb_user" EntityType="Self.tb_user" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_tb_user_tb_language" Association="Self.FK_tb_user_tb_language">
+            <End Role="tb_language" EntitySet="tb_language" />
+            <End Role="tb_user" EntitySet="tb_user" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TestProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tb_language">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="tb_user" Relationship="Self.FK_tb_user_tb_language" FromRole="tb_language" ToRole="tb_user" />
+        </EntityType>
+        <EntityType Name="tb_log">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="result" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="tb_user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="name" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="creation_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="language_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tb_language" Relationship="Self.FK_tb_user_tb_language" FromRole="tb_user" ToRole="tb_language" />
+        </EntityType>
+        <Association Name="FK_tb_user_tb_language">
+          <End Role="tb_language" Type="Self.tb_language" Multiplicity="1" />
+          <End Role="tb_user" Type="Self.tb_user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tb_language">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="tb_user">
+              <PropertyRef Name="language_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TestProjectEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tb_language" EntityType="Self.tb_language" />
+          <EntitySet Name="tb_log" EntityType="Self.tb_log" />
+          <EntitySet Name="tb_user" EntityType="Self.tb_user" />
+          <AssociationSet Name="FK_tb_user_tb_language" Association="Self.FK_tb_user_tb_language">
+            <End Role="tb_language" EntitySet="tb_language" />
+            <End Role="tb_user" EntitySet="tb_user" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище TestProjectModelContainer" CdmEntityContainer="TestProjectEntities1">
+          <EntitySetMapping Name="tb_language">
+            <EntityTypeMapping TypeName="TestProjectModel.tb_language">
+              <MappingFragment StoreEntitySet="tb_language">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_log">
+            <EntityTypeMapping TypeName="TestProjectModel.tb_log">
+              <MappingFragment StoreEntitySet="tb_log">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="date" ColumnName="date" />
+                <ScalarProperty Name="result" ColumnName="result" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tb_user">
+            <EntityTypeMapping TypeName="TestProjectModel.tb_user">
+              <MappingFragment StoreEntitySet="tb_user">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="creation_date" ColumnName="creation_date" />
+                <ScalarProperty Name="language_id" ColumnName="language_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
